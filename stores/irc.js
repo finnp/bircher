@@ -4,6 +4,7 @@ module.exports = store
 
 function store (state, emitter) {
   state.messages = []
+  state.users = []
 
   emitter.on('irc:join', function (nick) {
     state.nick = nick
@@ -17,6 +18,10 @@ function store (state, emitter) {
     })
     remote.on('message', function (message) {
       state.messages.push(message)
+      emitter.emit('render')
+    })
+    remote.on('users', function (users) {
+      state.users = users
       emitter.emit('render')
     })
   })

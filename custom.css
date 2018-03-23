@@ -1,0 +1,8 @@
+html, body {
+  height: 100%;
+}
+
+.userlist {
+  width: 220px;
+  max-width: 260px;
+}
