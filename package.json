@@ -15,6 +15,7 @@
     "choo-service-worker": "^2.4.0",
     "irc-framework": "^2.11.0",
     "pump": "^3.0.0",
+    "pumpify": "^1.4.0",
     "sheetify": "^7.3.0",
     "ssejson": "^1.2.0",
     "tachyons": "^4.9.1"
