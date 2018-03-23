@@ -6,9 +6,11 @@ module.exports = view
 
 function view (state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
+  // state.connected = true
+  // state.users = [{nick: 'test'}, {nick: 'blub'}]
 
   return html`
-    <body class="sans-serif">
+    <body class="helvetica">
       ${state.connected ? showMessages() : login()}
     </body>
   `
@@ -20,9 +22,9 @@ function view (state, emit) {
   function showMessages () {
     return html`
       <div class="flex h-100">
-        <div class="userlist pl2 bg-dark-blue h-100 white">
-          <h3>users</h3>
-          ${state.users.map(user => html`<div>${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
+        <div class="userlist pl2 bg-navy h-100 white">
+          <h3 class="mb2">Users</h3>
+          ${state.users.map(user => html`<div class="pb2"><span class="light-green">● </span>${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
         </div>
         <div class="w-75">
           <div class="pl4 pt4">
