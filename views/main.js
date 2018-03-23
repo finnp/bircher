@@ -14,7 +14,7 @@ function view (state, emit) {
   `
 
   function onkeyup (e) {
-    if (e.key === 'Enter') emit('messages:send', e.target.value)
+    if (e.key === 'Enter') emit('irc:say', e.target.value)
   }
 
   function showMessages () {
@@ -40,7 +40,7 @@ function view (state, emit) {
             <input id="nickname" class="pa2 input-reset ba bg-transparent w-100 measure" type="text">
           </div>
         </fieldset>
-        <div class="mt3"><input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Start chatting"></div>
+        <div class="mt3"><input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="${state.connecting ? 'Connecting...' : 'Start chatting'}"></div>
       </form>
     </div>
     </div>
@@ -50,7 +50,7 @@ function view (state, emit) {
   function onlogin (e) {
     e.preventDefault()
     var name = e.target.querySelector('#nickname').value
-    emit('login', name)
+    emit('irc:join', name || defaultUsername())
   }
 }
 
@@ -61,4 +61,8 @@ function renderMessage (message) {
     <div>${message.message}</div>
   </div>
   `
+}
+
+function defaultUsername () {
+  return 'laschuser' + Math.random().toString().slice(2, 10)
 }

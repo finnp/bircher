@@ -14,11 +14,9 @@
     "choo": "^6.10.3",
     "choo-service-worker": "^2.4.0",
     "irc-framework": "^2.11.0",
-    "pump": "^3.0.0",
-    "pumpify": "^1.4.0",
-    "server-router": "^6.0.0",
     "sheetify": "^7.3.0",
-    "ssejson": "^1.2.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
     "tachyons": "^4.9.1"
   },
   "devDependencies": {
