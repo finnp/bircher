@@ -16,7 +16,7 @@ app.use(require('./stores/messages'))
 app.use(function (state, emitter) {
   emitter.on('login', function (nick) {
     state.nick = nick
-    const sse = ssejson.fromEventSource(new window.EventSource('http://localhost:3000/' + nick))
+    const sse = ssejson.fromEventSource(new window.EventSource('http://localhost:3000/events/' + nick))
     sse.on('data', function (data) {
       if (data.type === 'connected') {
         state.connected = true
