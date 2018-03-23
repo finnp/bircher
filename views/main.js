@@ -7,6 +7,7 @@ module.exports = view
 function view (state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
   // state.connected = true
+  // state.nick = 'Finn'
   // state.users = [{nick: 'test'}, {nick: 'blub'}]
 
   return html`
@@ -21,21 +22,23 @@ function view (state, emit) {
 
   function showMessages () {
     return html`
-      <div class="h-100">
+      <div class="flex flex-column h-100">
         <div class="w-100 pa2 bg-lightest-blue">
-        <strong>${state.channel}</strong>
-        <span>${state.topic || ''}</span>
+          <strong>${state.channel}</strong>
+          <span>${state.topic || ''}</span>
         </div>
         <div class="flex h-100">
           <div class="userlist pl2 bg-navy h-100 white">
             <h3 class="mb2">Users</h3>
             ${state.users.map(user => html`<div class="pb2">${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
           </div>
-          <div class="w-75">
-            <div class="pl4 pt4">
+          <div class="chat w-100">
+            <div class="messages pl4 pt4">
               ${state.messages.map(renderMessage)}
+              <div id="messagesbottom"></div>
+              <div class="pt6"></div>
             </div>
-            <input onkeyup=${onkeyup} class="input-reset ba b--black-20 pa2 ma3 db w-100 bottom-0 fixed" type="text">
+            <input onkeyup=${onkeyup} class="input-reset ba  b--black-20 pa2 ma3 db w-75 bottom-0 fixed" type="text">
           </div>
         </div>
       </div>
