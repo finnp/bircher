@@ -24,8 +24,8 @@ function view (state, emit) {
 function renderMessage (message) {
   return html`
   <div class="pb2">
-    <div><strong>${message.user}</strong></div>
-    <div>${message.text}</div>
+    <div><strong>${message.nick}</strong></div>
+    <div>${message.message}</div>
   </div>
   `
 }
