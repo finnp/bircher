@@ -28,6 +28,10 @@ function store (state, emitter) {
 
   emitter.on('irc:say', function (text) {
     var message = {nick: state.nick, message: text}
+    if (text.trim()[0] === '/') {
+      window.alert('IRC commands are not supported. Sorry!')
+      return
+    }
     state.messages.push(message)
     remote.emit('say', text)
     emitter.emit('render')
