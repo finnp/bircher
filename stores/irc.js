@@ -11,9 +11,10 @@ function store (state, emitter) {
     state.connecting = true
     emitter.emit('render')
     remote.emit('join', nick)
-    remote.on('connected', function () {
+    remote.on('connected', function (channel) {
       state.connecting = false
       state.connected = true
+      state.channel = channel
       emitter.emit('render')
     })
     remote.on('message', function (message) {
@@ -22,6 +23,10 @@ function store (state, emitter) {
     })
     remote.on('users', function (users) {
       state.users = users
+      emitter.emit('render')
+    })
+    remote.on('topic', function (topic) {
+      state.topic = '  ' + topic
       emitter.emit('render')
     })
   })

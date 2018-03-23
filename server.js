@@ -20,8 +20,11 @@ io.on('connection', function (client) {
   })
 
   irc.on('registered', function () {
-    client.emit('connected')
+    client.emit('connected', channelName)
     const channel = irc.channel(channelName)
+    irc.on('topic', function (data) {
+      client.emit('topic', data.topic)
+    })
     channel.updateUsers()
     channel.stream().on('data', function (message) {
       client.emit('message', message)
