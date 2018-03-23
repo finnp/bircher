@@ -32,13 +32,14 @@ function view (state, emit) {
             <h3 class="mb2">Users</h3>
             ${state.users.map(user => html`<div class="pb2">${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
           </div>
-          <div class="chat w-100">
-            <div class="messages pl4 pt4">
+          <div class="flex flex-column chat w-100">
+            <div class="messages pl4 pt4 h-100">
               ${state.messages.map(renderMessage)}
               <div id="messagesbottom"></div>
-              <div class="pt6"></div>
             </div>
-            <input onkeyup=${onkeyup} class="input-reset ba  b--black-20 pa2 ma3 db w-75 bottom-0 fixed" type="text">
+            <div>
+              <input onkeyup=${onkeyup} class="input-reset ba b--black-20 pa2 ma3 db w-75" type="text">
+            </div>
           </div>
         </div>
       </div>

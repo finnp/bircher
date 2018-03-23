@@ -23,7 +23,9 @@ function store (state, emitter) {
       remote.on('message', function (message) {
         state.messages.push(message)
         emitter.emit('render')
-        emitter.emit('irc:scrollbottom')
+        setTimeout(function () {
+          emitter.emit('irc:scrollbottom')
+        }, 100)
       })
       remote.on('users', function (users) {
         state.users = users
@@ -44,12 +46,14 @@ function store (state, emitter) {
       state.messages.push(message)
       remote.emit('say', text)
       emitter.emit('render')
-      emitter.emit('irc:scrollbottom')
+      setTimeout(function () {
+        emitter.emit('irc:scrollbottom')
+      }, 100)
     })
 
     emitter.on('irc:scrollbottom', function () {
       var target = document.querySelector('#messagesbottom')
-      var element = document.querySelector('.chat')
+      var element = document.querySelector('.messages')
       animateScrollTo(target, {
         element
       })
