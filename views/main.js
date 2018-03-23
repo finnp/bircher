@@ -48,13 +48,13 @@ function view (state, emit) {
 
   function login () {
     return html`
-    <div class="vh-100 dt w-100">
-    <div class="dtc v-mid tc ph3 ph4-l">
-      <form method="get" accept-charset="utf-8" onsubmit=${onlogin}>
+    <div class="vh-100 dt w-100 bg-blue">
+    <div class="dtc v-mid pl3">
+      <form class="pa5 bg-white w-50" method="get" accept-charset="utf-8" onsubmit=${onlogin}>
         <fieldset class="ba b--transparent ph0 mh0">
           <legend class="ph0 mh0 fw6 clip">Join chat</legend>
           <div class="mt3">
-            <label class="db fw4 lh-copy f6" for="email-address">Nick name</label>
+            <label class="db fw4 lh-copy f6" for="email-address">Nickname</label>
             <input id="nickname" class="pa2 input-reset ba bg-transparent w-100 measure" type="text">
           </div>
         </fieldset>
