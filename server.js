@@ -1,13 +1,30 @@
+const socketio = require('socket.io')
 const Irc = require('irc-framework')
-const io = require('socket.io')()
+const express = require('express')
+const envobj = require('envobj')
+const http = require('http')
 
-const channelName = '#lasch'
+const app = express()
+app.use('/', express.static('dist'))
+const server = http.createServer(app)
+const io = socketio(server)
+
+const env = envobj({
+  CHANNEL: '#lasch',
+  PORT: 3000
+})
+
+const channelName = env.CHANNEL
 
 io.on('connection', function (socket) {
   const irc = new Irc.Client()
 
   socket.on('disconnect', function () {
     irc.quit()
+  })
+
+  irc.command_handler.on('all', function (e, data) {
+    console.log(e, data)
   })
 
   irc.on('nick in use', function (data) {
@@ -62,4 +79,5 @@ io.on('connection', function (socket) {
     }
   })
 })
-io.listen(3000)
+
+server.listen(env.PORT)

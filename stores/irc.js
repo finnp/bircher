@@ -1,4 +1,4 @@
-var remote = require('socket.io-client')('http://localhost:3000')
+var remote = require('socket.io-client')()
 var animateScrollTo = require('animated-scroll-to')
 
 module.exports = store
@@ -43,7 +43,10 @@ function store (state, emitter) {
     })
 
     emitter.on('irc:say', function (text) {
-      var message = {nick: state.nick, message: text}
+      var message = {
+        nick: state.nick,
+        message: text
+      }
       if (text.trim()[0] === '/') {
         window.alert('IRC commands are not supported. Sorry!')
         return

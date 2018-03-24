@@ -15,6 +15,8 @@
     "choo": "^6.10.3",
     "choo-service-worker": "^2.4.0",
     "dom-notifications": "^2.0.2",
+    "envobj": "^1.0.4",
+    "express": "^4.16.3",
     "irc-framework": "^2.11.0",
     "load-external": "^1.0.2",
     "sheetify": "^7.3.0",
