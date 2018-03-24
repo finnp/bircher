@@ -1,4 +1,7 @@
 var html = require('choo/html')
+var Notifications = require('dom-notifications/main')
+
+var notifications = new Notifications()
 
 var TITLE = 'lasch - main'
 
@@ -12,6 +15,7 @@ function view (state, emit) {
 
   return html`
     <body class="helvetica">
+      ${notifications.render(state.notifications)}
       ${state.connected ? showMessages() : login()}
     </body>
   `

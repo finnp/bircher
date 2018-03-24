@@ -3,34 +3,47 @@ const io = require('socket.io')()
 
 const channelName = '#lasch'
 
-io.on('connection', function (client) {
+io.on('connection', function (socket) {
   const irc = new Irc.Client()
 
-  client.on('disconnect', function () {
+  socket.on('disconnect', function () {
     irc.quit()
   })
 
-  client.on('join', function (nick) {
+  irc.on('nick in use', function (data) {
+    socket.emit('irc-error', data.reason)
+  })
+
+  irc.on('nick invalid', function (data) {
+    socket.emit('irc-error', 'Username invalid: ' + data.reason)
+  })
+
+  socket.on('error', function (err) {
+    console.error(err)
+  })
+
+  socket.on('join', function (nick) {
     console.log(`${nick} connected`)
     irc.connect({
       host: 'irc.freenode.net',
       port: 6667,
       nick,
-      username: nick
+      username: nick,
+      gecos: nick
     })
   })
 
   irc.on('registered', function () {
-    client.emit('connected', channelName)
+    socket.emit('connected', channelName)
     const channel = irc.channel(channelName)
     irc.on('topic', function (data) {
-      client.emit('topic', data.topic)
+      socket.emit('topic', data.topic)
     })
     channel.updateUsers()
     channel.stream().on('data', function (message) {
-      client.emit('message', message)
+      socket.emit('message', message)
     })
-    client.on('say', function (text) {
+    socket.on('say', function (text) {
       channel.say(text)
     })
 
@@ -44,7 +57,7 @@ io.on('connection', function (client) {
 
     function updateUsers () {
       process.nextTick(function () {
-        client.emit('users', channel.users)
+        socket.emit('users', channel.users)
       })
     }
   })

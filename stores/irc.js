@@ -36,6 +36,10 @@ function store (state, emitter) {
         state.topic = '  ' + topic
         emitter.emit('render')
       })
+      remote.on('irc-error', function (errorMessage) {
+        state.connecting = false
+        emitter.emit('error', errorMessage)
+      })
     })
 
     emitter.on('irc:say', function (text) {
