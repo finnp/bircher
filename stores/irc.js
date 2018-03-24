@@ -7,6 +7,7 @@ function store (state, emitter) {
   state.messages = []
   state.users = []
   state.channel = '...'
+  state.defaultNick = 'user' + Math.random().toString().slice(2, 10)
 
   emitter.on(state.events.DOMCONTENTLOADED, function () {
     emitter.on('irc:join', function (nick) {

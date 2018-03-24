@@ -51,11 +51,12 @@ function view (state, emit) {
     <div class="vh-100 dt w-100 bg-blue">
     <div class="dtc v-mid pl3">
       <form class="pa5 bg-white w-50" method="get" accept-charset="utf-8" onsubmit=${onlogin}>
+        <div class="f4">How do you want to be called?</div>
         <fieldset class="ba b--transparent ph0 mh0">
           <legend class="ph0 mh0 fw6 clip">Join chat</legend>
           <div class="mt3">
             <label class="db fw4 lh-copy f6" for="email-address">Nickname</label>
-            <input id="nickname" class="pa2 input-reset ba bg-transparent w-100 measure" type="text">
+            <input maxlength="16" placeholder=${state.defaultNick} id="nickname" class="pa2 input-reset ba bg-transparent w-100 measure" type="text">
           </div>
         </fieldset>
         <div class="mt3"><input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="${state.connecting ? 'Connecting...' : 'Start chatting'}"></div>
@@ -68,7 +69,7 @@ function view (state, emit) {
   function onlogin (e) {
     e.preventDefault()
     var name = e.target.querySelector('#nickname').value
-    emit('irc:join', name || defaultUsername())
+    emit('irc:join', name || state.defaultNick)
   }
 }
 
@@ -79,8 +80,4 @@ function renderMessage (message) {
     <div>${message.message}</div>
   </div>
   `
-}
-
-function defaultUsername () {
-  return 'laschuser' + Math.random().toString().slice(2, 10)
 }
