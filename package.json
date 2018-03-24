@@ -14,7 +14,6 @@
   "dependencies": {
     "animated-scroll-to": "^1.1.10",
     "choo": "^6.10.3",
-    "choo-service-worker": "^2.4.0",
     "dom-notifications": "^2.0.2",
     "envobj": "^1.0.4",
     "express": "^4.16.3",
