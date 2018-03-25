@@ -3,15 +3,12 @@ var Notifications = require('dom-notifications/main')
 
 var notifications = new Notifications()
 
-var TITLE = 'lasch - main'
+var TITLE = 'lasch'
 
 module.exports = view
 
 function view (state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
-  // state.connected = true
-  // state.nick = 'Finn'
-  // state.users = [{nick: 'test'}, {nick: 'blub'}]
 
   return html`
     <body class="helvetica">

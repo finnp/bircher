@@ -1,7 +1,6 @@
 {
   "name": "bircher",
-  "version": "1.0.0",
-  "private": true,
+  "version": "0.0.0",
   "scripts": {
     "build": "bankai build index.js",
     "create": "choo-scaffold",
