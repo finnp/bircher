@@ -1,4 +1,4 @@
-# lasch
+# bircher
 Client for IRC
 
 ## Commands

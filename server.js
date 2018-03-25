@@ -10,7 +10,7 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 const env = envobj({
-  CHANNEL: '#lasch',
+  CHANNEL: '#bircher',
   PORT: 3000
 })
 

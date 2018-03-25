@@ -1,4 +1,4 @@
-var remote = require('socket.io-client')()
+var remote = require('socket.io-client')(process.env.SERVER)
 var animateScrollTo = require('animated-scroll-to')
 
 module.exports = store

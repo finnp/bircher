@@ -1,12 +1,12 @@
 {
-  "name": "lasch",
+  "name": "bircher",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "bankai build index.js",
     "create": "choo-scaffold",
     "inspect": "bankai inspect index.js",
-    "dev": "bankai start index.js",
+    "dev": "SERVER=http://localhost:3000 bankai start index.js",
     "start": "node server",
     "test": "standard && npm run test-deps",
     "test-deps": "dependency-check . && dependency-check . --extra --no-dev -i tachyons"
