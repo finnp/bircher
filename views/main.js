@@ -1,5 +1,6 @@
 var html = require('choo/html')
 var Notifications = require('dom-notifications/main')
+var md5 = require('md5')
 
 var notifications = new Notifications()
 
@@ -9,6 +10,13 @@ module.exports = view
 
 function view (state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
+
+  // state.connected = true
+  // state.messages = [
+  //   {message: 'test', nick: 'hi'},
+  //   {message: 'hallo', nick: 'ho'},
+  //   {message: 'halloooo', nick: 'hol'}
+  // ]
 
   return html`
     <body class="helvetica">
@@ -76,9 +84,12 @@ function view (state, emit) {
 
 function renderMessage (message) {
   return html`
-  <div class="pb2">
-    <div><strong>${message.nick}</strong></div>
-    <div>${message.message}</div>
+  <div class="pb2 flex">
+    <div class="pr2"><img src="http://www.gravatar.com/avatar/${md5(message.nick + '@bircher')}.jpg?s=36&d=identicon" alt="Avatar"/></div>
+    <div>
+      <div><strong>${message.nick}</strong></div>
+      <div>${message.message}</div>
+    </div>
   </div>
   `
 }
