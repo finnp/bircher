@@ -15,7 +15,9 @@ function view (state, emit) {
   // state.messages = [
   //   {message: 'test', nick: 'hi'},
   //   {message: 'hallo', nick: 'ho'},
-  //   {message: 'halloooo', nick: 'hol'}
+  //   {message: 'halloooo', nick: 'hol'},
+  //   {message: 'halloooo', nick: 'finnp', ident: 'sid42883'},
+  //   {message: 'halloooo', nick: 'no-avatar', ident: 'sid209493'}
   // ]
 
   return html`
@@ -39,7 +41,7 @@ function view (state, emit) {
         <div class="flex h-100">
           <div class="userlist pl2 bg-navy h-100 white">
             <h3 class="mb2">Users</h3>
-            ${state.users.map(user => html`<div class="pb2">${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
+            ${Object.values(state.users).map(user => html`<div class="pb2">${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
           </div>
           <div class="flex flex-column chat w-100">
             <div class="messages pl4 pt4 h-100">
@@ -80,16 +82,24 @@ function view (state, emit) {
     var name = e.target.querySelector('#nickname').value
     emit('irc:join', name || state.defaultNick)
   }
-}
 
-function renderMessage (message) {
-  return html`
-  <div class="pb2 flex">
-    <div class="pr2"><img src="http://www.gravatar.com/avatar/${md5(message.nick + '@bircher')}.jpg?s=36&d=identicon" alt="Avatar"/></div>
-    <div>
-      <div><strong>${message.nick}</strong></div>
-      <div>${message.message}</div>
+  function renderMessage (message) {
+    return html`
+    <div class="pb2 flex">
+      <div class="pr2">${getAvatar(message)}</div>
+      <div>
+        <div><strong>${message.nick}</strong></div>
+        <div>${message.message}</div>
+      </div>
     </div>
-  </div>
-  `
+    `
+  }
+
+  function getAvatar (message) {
+    var user = state.users[message.nick]
+    var avatar = user && user.avatar
+      ? user.avatar
+      : `https://www.gravatar.com/avatar/${md5(message.nick + '@bircher')}.jpg?s=36&d=identicon&f=y`
+    return html`<img src="${avatar}" alt="Avatar of ${message.nick}" />`
+  }
 }

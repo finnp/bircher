@@ -1,11 +1,12 @@
 var remote = require('socket.io-client')(process.env.SERVER)
 var animateScrollTo = require('animated-scroll-to')
+var keyBy = require('lodash/keyby')
 
 module.exports = store
 
 function store (state, emitter) {
   state.messages = []
-  state.users = []
+  state.users = {} // key: nick
   state.channel = '...'
   state.defaultNick = 'user' + Math.random().toString().slice(2, 10)
 
@@ -24,12 +25,13 @@ function store (state, emitter) {
       remote.on('message', function (message) {
         state.messages.push(message)
         emitter.emit('render')
+        checkAvatar(message)
         setTimeout(function () {
           emitter.emit('irc:scrollbottom')
         }, 100)
       })
       remote.on('users', function (users) {
-        state.users = users
+        state.users = keyBy(users, 'nick')
         emitter.emit('render')
       })
       remote.on('topic', function (topic) {
@@ -67,4 +69,28 @@ function store (state, emitter) {
       })
     })
   })
+
+  function checkAvatar (message) {
+    var user = state.users[message.nick]
+    if (user && !user.checkedAvatar) {
+      findIrcCloudAvatar(message)
+        .then(ircCloudAvatar => {
+          user.avatar = ircCloudAvatar
+          user.checkedAvatar = true
+          emitter.emit('render')
+        })
+    }
+  }
+
+  function findIrcCloudAvatar (message) {
+    return new Promise(resolve => {
+      if (!message.ident || message.ident.slice(0, 3) !== 'sid') return resolve(false)
+
+      var url = `https://static.irccloud-cdn.com/avatar-redirect/s36/${message.ident.slice(3)}`
+      var testImage = new window.Image()
+      testImage.onload = () => resolve(url)
+      testImage.onerror = () => resolve(false)
+      testImage.src = url
+    })
+  }
 }
