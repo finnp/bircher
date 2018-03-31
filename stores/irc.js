@@ -1,12 +1,13 @@
 var remote = require('socket.io-client')(process.env.SERVER)
 var animateScrollTo = require('animated-scroll-to')
-var keyBy = require('lodash/keyby')
+var md5 = require('md5')
 
 module.exports = store
 
 function store (state, emitter) {
   state.messages = []
-  state.users = {} // key: nick
+  state.users = []
+  state.avatars = {}
   state.channel = '...'
   state.defaultNick = 'user' + Math.random().toString().slice(2, 10)
 
@@ -31,7 +32,7 @@ function store (state, emitter) {
         }, 100)
       })
       remote.on('users', function (users) {
-        state.users = keyBy(users, 'nick')
+        state.users = users
         emitter.emit('render')
       })
       remote.on('topic', function (topic) {
@@ -49,6 +50,7 @@ function store (state, emitter) {
         nick: state.nick,
         message: text
       }
+      checkAvatar(message)
       if (text.trim()[0] === '/') {
         window.alert('IRC commands are not supported. Sorry!')
         return
@@ -71,26 +73,27 @@ function store (state, emitter) {
   })
 
   function checkAvatar (message) {
-    var user = state.users[message.nick]
-    if (user && !user.checkedAvatar) {
-      findIrcCloudAvatar(message)
-        .then(ircCloudAvatar => {
-          user.avatar = ircCloudAvatar
-          user.checkedAvatar = true
+    var avatar = state.avatars[message.nick]
+    if (!avatar) {
+      findAvatar(message)
+        .then(avatar => {
+          state.avatars[message.nick] = avatar
           emitter.emit('render')
         })
     }
   }
 
-  function findIrcCloudAvatar (message) {
-    return new Promise(resolve => {
-      if (!message.ident || message.ident.slice(0, 3) !== 'sid') return resolve(false)
+  function findAvatar (message) {
+    var gravatarUrl = `https://www.gravatar.com/avatar/${md5(message.nick + '@bircher')}.jpg?s=36&d=identicon&f=y`
 
-      var url = `https://static.irccloud-cdn.com/avatar-redirect/s36/${message.ident.slice(3)}`
+    return new Promise(resolve => {
+      if (!message.ident || message.ident.slice(0, 3) !== 'sid') return resolve(gravatarUrl)
+
+      var ircCloudUrl = `https://static.irccloud-cdn.com/avatar-redirect/s36/${message.ident.slice(3)}`
       var testImage = new window.Image()
-      testImage.onload = () => resolve(url)
-      testImage.onerror = () => resolve(false)
-      testImage.src = url
+      testImage.onload = () => resolve(ircCloudUrl)
+      testImage.onerror = () => resolve(gravatarUrl)
+      testImage.src = ircCloudUrl
     })
   }
 }

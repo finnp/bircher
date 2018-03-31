@@ -1,10 +1,9 @@
 var html = require('choo/html')
 var Notifications = require('dom-notifications/main')
-var md5 = require('md5')
 
 var notifications = new Notifications()
 
-var TITLE = 'lasch'
+var TITLE = 'bircher'
 
 module.exports = view
 
@@ -86,7 +85,7 @@ function view (state, emit) {
   function renderMessage (message) {
     return html`
     <div class="pb2 flex">
-      <div class="pr2">${getAvatar(message)}</div>
+      <div class="avatar mr2">${getAvatar(message)}</div>
       <div>
         <div><strong>${message.nick}</strong></div>
         <div>${message.message}</div>
@@ -96,10 +95,8 @@ function view (state, emit) {
   }
 
   function getAvatar (message) {
-    var user = state.users[message.nick]
-    var avatar = user && user.avatar
-      ? user.avatar
-      : `https://www.gravatar.com/avatar/${md5(message.nick + '@bircher')}.jpg?s=36&d=identicon&f=y`
+    var avatar = state.avatars[message.nick]
+    if (!avatar) return html`<div></div>`
     return html`<img src="${avatar}" alt="Avatar of ${message.nick}" />`
   }
 }

@@ -12,3 +12,7 @@ html, body {
   width: 220px;
   max-width: 260px;
 }
+
+.avatar {
+  width: 36px;
+}

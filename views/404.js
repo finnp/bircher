@@ -1,6 +1,6 @@
 var html = require('choo/html')
 
-var TITLE = 'lasch - route not found'
+var TITLE = 'bircher - route not found'
 
 module.exports = view
 
