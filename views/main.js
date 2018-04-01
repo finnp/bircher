@@ -95,11 +95,19 @@ function view (state, emit) {
   }
 
   function renderMessage (message) {
+    if (message.sameAuthor) {
+      return html`
+        <div class="pt1 flex">
+          <div class="avatar mr2"></div>
+          <div>${message.message}</div>
+        </div>
+      `
+    }
     return html`
-    <div class="pb2 flex">
+    <div class="pt2 flex">
       <div class="avatar mr2">${getAvatar(message)}</div>
       <div>
-        <div><strong>${message.nick}</strong></div>
+        <div class="pb2"><strong>${message.nick}</strong></div>
         <div>${message.message}</div>
       </div>
     </div>

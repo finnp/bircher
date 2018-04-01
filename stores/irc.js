@@ -12,37 +12,45 @@ function store (state, emitter) {
   state.defaultNick = 'user' + Math.random().toString().slice(2, 10)
 
   emitter.on(state.events.DOMCONTENTLOADED, function () {
+    remote.on('connected', function (channel) {
+      state.connecting = false
+      state.connected = true
+      state.channel = channel
+      emitter.emit('render')
+    })
+
+    remote.on('message', function (message) {
+      emitter.emit('message', message)
+      checkAvatar(message)
+    })
+    remote.on('users', function (users) {
+      state.users = users
+      emitter.emit('render')
+    })
+    remote.on('topic', function (topic) {
+      state.topic = '  ' + topic
+      emitter.emit('render')
+    })
+    remote.on('irc-error', function (errorMessage) {
+      state.connecting = false
+      emitter.emit('error', errorMessage)
+    })
+
     emitter.on('irc:join', function (nick) {
       state.nick = nick
       state.connecting = true
       emitter.emit('render')
       remote.emit('join', nick)
-      remote.on('connected', function (channel) {
-        state.connecting = false
-        state.connected = true
-        state.channel = channel
-        emitter.emit('render')
-      })
-      remote.on('message', function (message) {
-        state.messages.push(message)
-        emitter.emit('render')
-        checkAvatar(message)
-        setTimeout(function () {
-          emitter.emit('irc:scrollbottom')
-        }, 100)
-      })
-      remote.on('users', function (users) {
-        state.users = users
-        emitter.emit('render')
-      })
-      remote.on('topic', function (topic) {
-        state.topic = '  ' + topic
-        emitter.emit('render')
-      })
-      remote.on('irc-error', function (errorMessage) {
-        state.connecting = false
-        emitter.emit('error', errorMessage)
-      })
+    })
+
+    emitter.on('message', function (message) {
+      var lastMessage = state.messages[state.messages.length - 1]
+      message.sameAuthor = lastMessage && lastMessage.nick === message.nick
+      state.messages.push(message)
+      emitter.emit('render')
+      setTimeout(function () {
+        emitter.emit('irc:scrollbottom')
+      }, 100)
     })
 
     emitter.on('irc:say', function (text) {
@@ -55,12 +63,8 @@ function store (state, emitter) {
         window.alert('IRC commands are not supported. Sorry!')
         return
       }
-      state.messages.push(message)
+      emitter.emit('message', message)
       remote.emit('say', text)
-      emitter.emit('render')
-      setTimeout(function () {
-        emitter.emit('irc:scrollbottom')
-      }, 100)
     })
 
     emitter.on('irc:scrollbottom', function () {
