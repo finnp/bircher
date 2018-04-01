@@ -38,10 +38,7 @@ function view (state, emit) {
           <span>${state.topic || ''}</span>
         </div>
         <div class="flex h-100">
-          <div class="userlist pl2 bg-navy h-100 white">
-            <h3 class="mb2">Users</h3>
-            ${Object.values(state.users).map(user => html`<div class="pb2">${user.nick}${state.nick === user.nick ? ' (you)' : ''}</div>`)}
-          </div>
+          ${renderUserlist(state.users)}
           <div class="flex flex-column chat w-100">
             <div class="messages pl4 pt4 h-100">
               ${state.messages.map(renderMessage)}
@@ -80,6 +77,21 @@ function view (state, emit) {
     e.preventDefault()
     var name = e.target.querySelector('#nickname').value
     emit('irc:join', name || state.defaultNick)
+  }
+
+  function renderUserlist () {
+    return renderUserlistFromList(
+      state.users.length > 0
+        ? state.users.map(user => state.nick === user.nick ? user.nick + ' (you)' : user.nick)
+        : ['██████', '████', '██████']
+    )
+  }
+
+  function renderUserlistFromList (texts) {
+    return html`<div class="userlist pl2 bg-navy h-100 white">
+      <h3 class="mb2">Users</h3>
+      ${texts.map(text => html`<div class="pb2">${text}</div>`)}
+    </div>`
   }
 
   function renderMessage (message) {
