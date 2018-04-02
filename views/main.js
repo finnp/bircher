@@ -1,5 +1,6 @@
 var html = require('choo/html')
 var Notifications = require('dom-notifications/main')
+var linkify = require('../lib/linkify')
 
 var notifications = new Notifications()
 
@@ -11,6 +12,8 @@ function view (state, emit) {
   if (state.title !== TITLE) emit(state.events.DOMTITLECHANGE, TITLE)
 
   // state.connected = true
+  // state.channel = '#bircher'
+  // state.topic = '🚂🚃🚃🚃🚃🚃🚃 | choo.io | Choo Weekly #7 2018: nanocomponent-cache, showrunner.io & cssnext https://medium.com/choojs/choo-weekly-7-2018-nanocomponent-cache-showrunner-io-cssnext-578e2aa19b08'
   // state.messages = [
   //   {message: 'test', nick: 'hi'},
   //   {message: 'hallo', nick: 'ho'},
@@ -33,10 +36,7 @@ function view (state, emit) {
   function showMessages () {
     return html`
       <div class="flex flex-column h-100">
-        <div class="w-100 pa2 bg-lightest-blue">
-          <strong>${state.channel}</strong>
-          <span>${state.topic || ''}</span>
-        </div>
+        ${renderHeader()}
         <div class="flex h-100">
           ${renderUserlist(state.users)}
           <div class="flex flex-column chat w-100">
@@ -77,6 +77,13 @@ function view (state, emit) {
     e.preventDefault()
     var name = e.target.querySelector('#nickname').value
     emit('irc:join', name || state.defaultNick)
+  }
+
+  function renderHeader () {
+    return html`<div class="w-100 flex items-center pa2 bg-lightest-blue">
+      <div class="pr3 f3">${state.channel}</div>
+      <div>${linkify(state.topic)}</div>
+    </div>`
   }
 
   function renderUserlist () {

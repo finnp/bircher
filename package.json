@@ -17,6 +17,7 @@
     "envobj": "^1.0.4",
     "express": "^4.16.3",
     "irc-framework": "^2.11.0",
+    "linkify-it": "^2.0.3",
     "load-external": "^1.0.2",
     "lodash": "^4.17.5",
     "md5": "^2.2.1",
