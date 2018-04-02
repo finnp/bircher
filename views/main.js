@@ -107,7 +107,7 @@ function view (state, emit) {
     <div class="pt2 flex">
       <div class="avatar mr2">${getAvatar(message)}</div>
       <div>
-        <div class="pb2"><strong>${message.nick}</strong></div>
+        <div class="pb1"><strong>${message.nick}</strong></div>
         <div>${message.message}</div>
       </div>
     </div>
